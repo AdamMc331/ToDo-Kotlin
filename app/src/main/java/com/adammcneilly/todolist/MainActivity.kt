@@ -13,23 +13,22 @@ import android.view.MenuItem
 
 class MainActivity : AppCompatActivity() {
 
-    var adapter: TaskAdapter? = TaskAdapter()
+    val adapter = TaskAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val toolbar = findViewById(R.id.toolbar) as? Toolbar
+        val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
 
-        val recyclerView = findViewById(R.id.task_list) as? RecyclerView
+        val recyclerView = findViewById(R.id.task_list) as RecyclerView
         val layoutManager = LinearLayoutManager(this)
-        adapter = TaskAdapter()
-        recyclerView?.layoutManager = layoutManager
-        recyclerView?.adapter = adapter
+        recyclerView.layoutManager = layoutManager
+        recyclerView.adapter = adapter
 
-        val fab = findViewById(R.id.fab) as? FloatingActionButton
-        fab?.setOnClickListener { _ ->
+        val fab = findViewById(R.id.fab) as FloatingActionButton
+        fab.setOnClickListener { _ ->
             val intent = Intent(this, AddTaskActivity::class.java)
             startActivityForResult(intent, ADD_TASK_REQUEST)
         }
@@ -38,7 +37,7 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == ADD_TASK_REQUEST && resultCode == Activity.RESULT_OK) {
             val task = Task(data?.getStringExtra(DESCRIPTION_TEXT).orEmpty())
-            adapter?.addTask(task)
+            adapter.addTask(task)
         }
     }
 
@@ -48,15 +47,15 @@ class MainActivity : AppCompatActivity() {
         val tasks = Storage.readData(this)
 
         // We only want to set the tasks if the list is already empty.
-        if (tasks != null && (adapter?.tasks?.isEmpty() ?: true)) {
-            adapter?.tasks = tasks
+        if (tasks != null && (adapter.tasks.isEmpty())) {
+            adapter.tasks = tasks
         }
     }
 
     override fun onPause() {
         super.onPause()
 
-        Storage.writeData(this, adapter?.tasks)
+        Storage.writeData(this, adapter.tasks)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
